@@ -1,0 +1,54 @@
+@font-face {
+  font-family: summaryFont;
+  src: url(./resources/summaryFont.ttf);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  font-family: summaryFont, sans-serif;
+}
+
+body {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #DCFFFD;
+}
+
+header,
+footer {
+  text-align: center;
+  width: 100vw;
+  background: #4fb477;
+  color: white;
+  padding: 10px 0;
+}
+
+header {
+  font-size: 2em;
+  letter-spacing: 0.5em;
+}
+
+footer {
+  font-weight: bold;
+  font-family: sans-serif;
+}
+
+.container {
+  width: auto;
+  height: 700px;
+  border: 1px solid black;
+  display: grid;
+  gap: 10px;
+}
+
+.container > div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 5em;
+  border: 1px solid black;
+}
