@@ -27,6 +27,7 @@ class Card {
 
 // Variables
 let flippedCards = 0;
+let canClick = true;
 
 // Cards must be 3 pairs || 6 pairs || 8 pairs
 let letters = ["A", "B", "C"];
@@ -48,19 +49,21 @@ letters.forEach(letter => {
 const cards = document.querySelectorAll('div.card');
 cards.forEach(card => {
   card.addEventListener('click', () => {
-    if (flippedCards < 2){ 
+    if (card.classList.contains('flip')) return;
+    if (flippedCards < 2 && canClick){ 
       flippedCards += 1;
-      showCard(card)
+      showCard(card);
 
-      if (flippedCards === 2) {
+      if(flippedCards === 2) {
+        canClick = false;
         getFlipCards();
+        flippedCards = 0;
       }
     }
   })
 })
 
 // Functions
-
 function showCard(element) {
   element.classList.add('flip');
 }
@@ -70,6 +73,7 @@ function closeCard(element) {
 }
 
 function getFlipCards() {
+  // Compare the two flipped cards
   let cards = document.querySelectorAll('.flip:not(.hide)');
 
   const card1 = cards[0];
@@ -80,6 +84,7 @@ function getFlipCards() {
     setTimeout(function() {
       card1.classList.add('hide');
       card2.classList.add('hide');
+      canClick = true;
     }, 1000);
   }
   else {
@@ -87,10 +92,9 @@ function getFlipCards() {
     setTimeout(function() {
       closeCard(card1);
       closeCard(card2);
+      canClick = true;
     }, 750)
-  }
-
-  flippedCards = 0;
+  } 
 }
 
 
