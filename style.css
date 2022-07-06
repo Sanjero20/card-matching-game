@@ -37,18 +37,56 @@ footer {
   font-family: sans-serif;
 }
 
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .container {
-  width: auto;
-  height: 700px;
+  width: 500px;
+  height: 500px;
+  padding: 20px 50px;
   border: 1px solid black;
+  background: rgb(31, 31, 31);
   display: grid;
   gap: 10px;
 }
 
-.container > div {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.card {
+  box-sizing: border-box;
   font-size: 5em;
   border: 1px solid black;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: all 0.5s ease;
+}
+
+.card,
+.front,
+.back {
+  border-radius: 15px;
+}
+
+.front {
+  position: absolute;
+  background-color: black;
+  border: 1px solid grey;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+}
+
+.back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  border: 1px solid black;
+  backface-visibility: hidden;
+  transform: rotateY(180deg)
+}
+
+.flip {
+  transform: rotateY(180deg);
 }
