@@ -28,64 +28,48 @@ class Card {
 // Variables
 let flippedCards = 0;
 let canClick = true;
+let moveCount = 0;
 
 // Shuffle order of cards function
 const container = document.querySelector('.container')
-const remaining =  document.querySelector('.remainingPairs')
+const remaining =  document.querySelector('#left-remaining')
+const moves = document.querySelector('#moves')
 const easytbn = document.getElementById('easy')
 const mediumbtn = document.getElementById('medium')
 const hardtbn = document.getElementById('hard')
 
 remaining.textContent = `Pairs Remaining:  `
+moves.textContent = `Moves: ${moveCount}`
 
-easytbn.addEventListener('click', () => {
-  const letters = ["A", "B", "C", "D", "E", "F", "G", "H"];
-  flippedCards = 0;
-  letters.length = 3;
-  let pairs = duplicateArray(letters)
-  pairs = shuffleArray(pairs)
-  clearContainer();
-  setGridLayout(2, 3)
-  createCards(pairs);
-  cardFunction();
-  }
-)
-
-mediumbtn.addEventListener('click', () => {
-  const letters = ["A", "B", "C", "D", "E", "F", "G", "H"];
-  flippedCards = 0;
-  letters.length = 6;
-  let pairs = duplicateArray(letters)
-  pairs = shuffleArray(pairs)
-  clearContainer();
-  setGridLayout(3, 4)
-  createCards(pairs);
-  cardFunction();
-  }
-)
-
-hardtbn.addEventListener('click', () => {
-  const letters = ["A", "B", "C", "D", "E", "F", "G", "H"];
-  flippedCards = 0;
-  letters.length = 8;
-  let pairs = duplicateArray(letters)
-  pairs = shuffleArray(pairs)
-  clearContainer();
-  setGridLayout(4, 4)
-  createCards(pairs);
-  cardFunction();
-  }
-)
+easytbn.addEventListener('click', () => playGame(3, 2, "225px", 3, "150px"))
+mediumbtn.addEventListener('click', () => playGame(6, 3, "160px", 4, "100px"))
+hardtbn.addEventListener('click', () => playGame(8, 4, "115px", 4, "90px"))
 
 // Functions
+function playGame(length, row, rowSize, column, columnSize) {
+  const letters = ["A", "B", "C", "D", "E", "F", "G", "H"];
+  flippedCards = 0;
+  letters.length = length;
+  remainingPairs = letters.length
+  let pairs = duplicateArray(letters)
+  pairs = shuffleArray(pairs)
+
+  showNumbersOfPairs();
+  clearContainer();
+  setGridLayout(row, rowSize, column, columnSize);
+  createCards(pairs);
+  cardFunction();
+}
+
 function clearContainer() {
   container.innerHTML = "";
+  moveCount = 0;
+  updateNumberOfMoves();
 }
 
 function cardFunction() {
   const cards = document.querySelectorAll('.card')
   cards.forEach(card => {
-    // card.classList.add('flip')
     card.addEventListener('click', () => {
       cardComparison(card);
     })
@@ -99,9 +83,9 @@ function createCards(array) {
   })
 }
 
-function setGridLayout(row, column) {
-  container.style['grid-template-columns'] = `repeat(${column}, 1fr)`
-  container.style['grid-template-rows'] = `repeat(${row}, 1fr)`
+function setGridLayout(row, rowSize, column, columnSize) {
+  container.style['grid-template-columns'] = `repeat(${column}, ${columnSize})`
+  container.style['grid-template-rows'] = `repeat(${row}, ${rowSize})`
 }
 
 function showCard(element) {
@@ -126,8 +110,11 @@ function compareFlippedCards() {
       card2.classList.add('hide');
       canClick = true;
       remainingPairs -= 1;
-      showNumbersOfPairs();
+      moveCount += 1;
       winCondition();
+      updateNumberOfMoves();
+      showNumbersOfPairs();
+
     }, 1000);
   }
   else {
@@ -135,15 +122,11 @@ function compareFlippedCards() {
     setTimeout(function() {
       closeCard(card1);
       closeCard(card2);
+      moveCount += 1;
+      updateNumberOfMoves();
       canClick = true;
     }, 750)
   } 
-}
-
-function showNumbersOfPairs() {
-  pairs = shuffleArray(pairs)
-  let text = `Pairs Remaining: ${remainingPairs}`
-  remaining.textContent = text;
 }
 
 function cardComparison(card) {
@@ -163,11 +146,26 @@ function cardComparison(card) {
 function winCondition() {
   setTimeout(function() {
     if (remainingPairs <= 0) {
+      moveCount = 0;
       window.alert("You win")
+      clearContainer();
+      updateNumberOfMoves();
     }
   }, 750)
 }
 
+// Status display functions
+function showNumbersOfPairs() {
+  let text = `Pairs Remaining: ${remainingPairs}`
+  remaining.textContent = text;
+}
+
+function updateNumberOfMoves() {
+  let text = `Moves: ${moveCount}`
+  moves.textContent = text;
+}
+
+// Array related functions
 function duplicateArray(array) {
   array.push(...array); 
   return array;
