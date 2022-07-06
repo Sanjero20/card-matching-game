@@ -29,41 +29,81 @@ class Card {
 let flippedCards = 0;
 let canClick = true;
 
-// Cards must be 3 pairs || 6 pairs || 8 pairs
-let letters = ["A", "B", "C"];
-letters.push(...letters);
-
 // Shuffle order of cards function
 const container = document.querySelector('.container')
+const remaining =  document.querySelector('.remainingPairs')
+const easytbn = document.getElementById('easy')
+const mediumbtn = document.getElementById('medium')
+const hardtbn = document.getElementById('hard')
 
-// Check what number of pairs
-container.style['grid-template-columns'] = `repeat(3, 1fr)`
-container.style['grid-template-rows'] = `repeat(2, 1fr)`
+remaining.textContent = `Pairs Remaining:  `
 
-// Create Cards
-letters.forEach(letter => {
-  const card =  new Card(letter);
-  container.appendChild(card.div)
-})
+easytbn.addEventListener('click', () => {
+  const letters = ["A", "B", "C", "D", "E", "F", "G", "H"];
+  flippedCards = 0;
+  letters.length = 3;
+  let pairs = duplicateArray(letters)
+  pairs = shuffleArray(pairs)
+  clearContainer();
+  setGridLayout(2, 3)
+  createCards(pairs);
+  cardFunction();
+  }
+)
 
-const cards = document.querySelectorAll('div.card');
-cards.forEach(card => {
-  card.addEventListener('click', () => {
-    if (card.classList.contains('flip')) return;
-    if (flippedCards < 2 && canClick){ 
-      flippedCards += 1;
-      showCard(card);
+mediumbtn.addEventListener('click', () => {
+  const letters = ["A", "B", "C", "D", "E", "F", "G", "H"];
+  flippedCards = 0;
+  letters.length = 6;
+  let pairs = duplicateArray(letters)
+  pairs = shuffleArray(pairs)
+  clearContainer();
+  setGridLayout(3, 4)
+  createCards(pairs);
+  cardFunction();
+  }
+)
 
-      if(flippedCards === 2) {
-        canClick = false;
-        getFlipCards();
-        flippedCards = 0;
-      }
-    }
-  })
-})
+hardtbn.addEventListener('click', () => {
+  const letters = ["A", "B", "C", "D", "E", "F", "G", "H"];
+  flippedCards = 0;
+  letters.length = 8;
+  let pairs = duplicateArray(letters)
+  pairs = shuffleArray(pairs)
+  clearContainer();
+  setGridLayout(4, 4)
+  createCards(pairs);
+  cardFunction();
+  }
+)
 
 // Functions
+function clearContainer() {
+  container.innerHTML = "";
+}
+
+function cardFunction() {
+  const cards = document.querySelectorAll('.card')
+  cards.forEach(card => {
+    // card.classList.add('flip')
+    card.addEventListener('click', () => {
+      cardComparison(card);
+    })
+  })
+}
+
+function createCards(array) {
+  array.forEach(letter => {
+    const card =  new Card(letter);
+    container.appendChild(card.div)
+  })
+}
+
+function setGridLayout(row, column) {
+  container.style['grid-template-columns'] = `repeat(${column}, 1fr)`
+  container.style['grid-template-rows'] = `repeat(${row}, 1fr)`
+}
+
 function showCard(element) {
   element.classList.add('flip');
 }
@@ -72,7 +112,7 @@ function closeCard(element) {
   element.classList.remove('flip');
 }
 
-function getFlipCards() {
+function compareFlippedCards() {
   // Compare the two flipped cards
   let cards = document.querySelectorAll('.flip:not(.hide)');
 
@@ -85,6 +125,9 @@ function getFlipCards() {
       card1.classList.add('hide');
       card2.classList.add('hide');
       canClick = true;
+      remainingPairs -= 1;
+      showNumbersOfPairs();
+      winCondition();
     }, 1000);
   }
   else {
@@ -97,5 +140,40 @@ function getFlipCards() {
   } 
 }
 
+function showNumbersOfPairs() {
+  pairs = shuffleArray(pairs)
+  let text = `Pairs Remaining: ${remainingPairs}`
+  remaining.textContent = text;
+}
 
+function cardComparison(card) {
+  if (card.classList.contains('flip')) return;
+    if (flippedCards < 2 && canClick){ 
+      flippedCards += 1;
+      showCard(card);
 
+      if(flippedCards === 2) {
+        canClick = false;
+        compareFlippedCards();
+        flippedCards = 0;
+      }
+    }
+}
+
+function winCondition() {
+  setTimeout(function() {
+    if (remainingPairs <= 0) {
+      window.alert("You win")
+    }
+  }, 750)
+}
+
+function duplicateArray(array) {
+  array.push(...array); 
+  return array;
+}
+
+function shuffleArray(array) {
+  array.sort(() => Math.random() - 0.5)
+  return array;
+}
