@@ -17,14 +17,14 @@ body {
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  background-color: #DCFFFD;
+  background-color: white;
 }
 
 header,
 footer {
   text-align: center;
   width: 100vw;
-  background: #4fb477;
+  background: #60ce80;
   color: white;
   padding: 10px 0;
 }
@@ -38,7 +38,7 @@ main {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: 20px;
 }
 
 footer {
@@ -53,10 +53,10 @@ footer {
 }
 
 .container {
-  width: 500px;
+  width: 400px;
   height: 500px;
   justify-content: center;
-  display: grid;
+  display: none;
   gap: 10px;
 }
 
@@ -72,12 +72,12 @@ footer {
 .back {
   box-sizing: border-box;
   border-radius: 5px;
-  border: 2px solid black;
+  border: 2px solid	#154360;
 }
 
 .front {
   position: absolute;
-  background-color: #111;
+  background-color: #f0f0f0;
   width: 100%;
   height: 100%;
   backface-visibility: hidden;
@@ -110,6 +110,7 @@ footer {
 }
 
 .status > p {
+  display: none;
   font-family: 'Courier New', Courier, monospace;
   font-size: 1.5em;
 }
@@ -117,6 +118,7 @@ footer {
 .difficulty {
   display: flex;
   justify-content: space-evenly;
+  gap: 10px;
   width: 100%;
 }
 
@@ -124,4 +126,23 @@ footer {
   font-family: 'Courier New', Courier, monospace;
   font-size: 1.5em;
   padding: 5px 20px;
+}
+
+@media (max-width: 768px){
+  main {
+    gap: 20px;
+  }
+  header {
+    font-size: 15px;
+  }
+
+  .status {
+    font-size: 11px;
+    width: 100%;
+    gap: 100px;
+  }
+  .container {
+    width: 350px;
+    height: 425px;
+  }
 }

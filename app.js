@@ -31,19 +31,20 @@ let canClick = true;
 let moveCount = 0;
 
 // Shuffle order of cards function
-const container = document.querySelector('.container')
-const remaining =  document.querySelector('#left-remaining')
-const moves = document.querySelector('#moves')
-const easytbn = document.getElementById('easy')
-const mediumbtn = document.getElementById('medium')
-const hardtbn = document.getElementById('hard')
+const container = document.querySelector('.container');
+const statusBar = document.querySelectorAll('.status > p');
+const remaining =  document.querySelector('#left-remaining');
+const moves = document.querySelector('#moves');
+const easytbn = document.getElementById('easy');
+const mediumbtn = document.getElementById('medium');
+const hardtbn = document.getElementById('hard');
 
-remaining.textContent = `Pairs Remaining:  `
+remaining.textContent = `Remaining:  `
 moves.textContent = `Moves: ${moveCount}`
 
-easytbn.addEventListener('click', () => playGame(3, 2, "225px", 3, "150px"))
-mediumbtn.addEventListener('click', () => playGame(6, 3, "160px", 4, "100px"))
-hardtbn.addEventListener('click', () => playGame(8, 4, "115px", 4, "90px"))
+easytbn.addEventListener('click', () => playGame(3, 2, "1fr", 3, "1fr"))
+mediumbtn.addEventListener('click', () => playGame(6, 3, "1fr", 4, "1fr"))
+hardtbn.addEventListener('click', () => playGame(8, 4, "1fr", 4, "1fr"))
 
 // Functions
 function playGame(length, row, rowSize, column, columnSize) {
@@ -54,19 +55,17 @@ function playGame(length, row, rowSize, column, columnSize) {
   let pairs = duplicateArray(letters)
   pairs = shuffleArray(pairs)
 
-  showNumbersOfPairs();
+  showStatusBar();
+  showContainer();
   clearContainer();
+
+  updateNumbersOfPairs();
   setGridLayout(row, rowSize, column, columnSize);
   createCards(pairs);
   cardFunction();
 }
 
-function clearContainer() {
-  container.innerHTML = "";
-  moveCount = 0;
-  updateNumberOfMoves();
-}
-
+// Initialize Functions
 function cardFunction() {
   const cards = document.querySelectorAll('.card')
   cards.forEach(card => {
@@ -88,14 +87,7 @@ function setGridLayout(row, rowSize, column, columnSize) {
   container.style['grid-template-rows'] = `repeat(${row}, ${rowSize})`
 }
 
-function showCard(element) {
-  element.classList.add('flip');
-}
-
-function closeCard(element) {
-  element.classList.remove('flip');
-}
-
+// Card Comparison Functions 
 function compareFlippedCards() {
   // Compare the two flipped cards
   let cards = document.querySelectorAll('.flip:not(.hide)');
@@ -113,7 +105,7 @@ function compareFlippedCards() {
       moveCount += 1;
       winCondition();
       updateNumberOfMoves();
-      showNumbersOfPairs();
+      updateNumbersOfPairs();
 
     }, 1000);
   }
@@ -150,13 +142,14 @@ function winCondition() {
       window.alert("You win")
       clearContainer();
       updateNumberOfMoves();
+      hideElements();
     }
   }, 750)
 }
 
 // Status display functions
-function showNumbersOfPairs() {
-  let text = `Pairs Remaining: ${remainingPairs}`
+function updateNumbersOfPairs() {
+  let text = `Remaining: ${remainingPairs}`
   remaining.textContent = text;
 }
 
@@ -174,4 +167,35 @@ function duplicateArray(array) {
 function shuffleArray(array) {
   array.sort(() => Math.random() - 0.5)
   return array;
+}
+
+// Show and Hide Functions
+function showStatusBar() {
+  statusBar.forEach(stats => {
+    stats.style.display ="inline";
+  })
+}
+
+function showContainer() {
+  container.style.display = "grid";
+}
+
+function hideElements() {
+  statusBar.forEach (stats => stats.style.display = "none");
+  container.style.display = "none";
+}
+
+function clearContainer() {
+  container.innerHTML = "";
+  moveCount = 0;
+  updateNumberOfMoves();
+}
+
+//  Flip card Functions
+function showCard(element) {
+  element.classList.add('flip');
+}
+
+function closeCard(element) {
+  element.classList.remove('flip');
 }
