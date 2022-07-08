@@ -25,6 +25,11 @@ class Card {
   }
 }
 
+// Prevent Dragging events
+document.addEventListener('dragstart', (e) => {
+  e.preventDefault();
+})
+
 // Variables
 let flippedCards = 0;
 let canClick = true;
